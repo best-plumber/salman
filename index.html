@@ -1,0 +1,356 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="meta_code"/>
+    <title>PlumbFix - Professional Plumbing Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-blue-800 text-white sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3 sm:py-4 flex justify-between items-center">
+            <h1 class="text-xl sm:text-2xl">state_folder
+</h1>
+            <nav class="hidden md:flex space-x-4">
+                <a href="#services" class="hover:text-blue-300 text-base">Services</a>
+                <a href="#about" class="hover:text-blue-300 text-base">About</a>
+                <a href="#contact" class="hover:text-blue-300 text-base">Contact</a>
+            </nav>
+            <button class="md:hidden p-2" onclick="toggleMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-700">
+            <a href="#services" class="block px-4 py-2 text-base hover:bg-blue-600">Services</a>
+            <a href="#about" class="block px-4 py-2 text-base hover:bg-blue-600">About</a>
+            <a href="#contact" class="block px-4 py-2 text-base hover:bg-blue-600">Contact</a>
+        </div>
+    </header>
+
+    <!-- Content Section 1: Home (Hero) -->
+    <section id="home" class="bg-blue-600 text-white py-12 sm:py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-xl sm:text-2xl mb-4">window Trusted Alabama Abbeville</h1>
+            <p class="text-base sm:text-lg mb-6">Fast, reliable, and professional plumbing services for your home or business.</p>
+            <a href="tel:1234567890" class="bg-yellow-500 text-gray-800 px-6 py-3 rounded-full text-base sm:text-lg hover:bg-yellow-400">Call Now: 1234567890</a>
+        </div>
+    </section>
+
+    <!-- Content Section 2: Services -->
+    <section id="services" class="py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Our Services</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Emergency Repairs</h3>
+                    <p class="text-base mb-4">24/7 emergency plumbing services to fix leaks, clogs, and more.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Pipe Installation</h3>
+                    <p class="text-base mb-4">Professional pipe installation and replacement for homes and businesses.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Drain Cleaning</h3>
+                    <p class="text-base mb-4">Expert drain cleaning to keep your plumbing system running smoothly.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Water Heater Services</h3>
+                    <p class="text-base mb-4">Installation, repair, and maintenance of water heaters.</p>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 3: About -->
+    <section id="about" class="bg-gray-200 py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">About Us</h2>
+            <p class="text-base sm:text-lg text-center max-w-2xl mx-auto mb-6">With over 15 years of experience, PlumbFix is your go-to plumbing service provider. Our certified plumbers are dedicated to delivering top-quality service with a focus on customer satisfaction.</p>
+            <div class="text-center">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 4: Contact -->
+    <section id="contact" class="py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Contact Us</h2>
+            <div class="max-w-lg mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-md">
+                <div class="space-y-4">
+                    <input type="text" placeholder="Your Name" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base">
+                    <input type="email" placeholder="Your Email" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base">
+                    <textarea placeholder="Your Message" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base" rows="5"></textarea>
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg text-base sm:text-lg hover:bg-blue-700">Send Message</button>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 5: Testimonials -->
+    <section id="testimonials" class="py-12 sm:py-16 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">What Our Customers Say</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <p class="text-base mb-4">"PlumbFix saved the day with their quick response to our burst pipe. Professional and affordable!"</p>
+                    <p class="font-semibold text-base">- Jane D.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <p class="text-base mb-4">"The team installed our new water heater perfectly. Highly recommend their services!"</p>
+                    <p class="font-semibold text-base">- Mark S.</p>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 6: Why Choose Us -->
+    <section id="why-choose-us" class="py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Why Choose PlumbFix?</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Certified Plumbers</h3>
+                    <p class="text-base">Our team is fully licensed and trained to handle all plumbing needs.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">24/7 Availability</h3>
+                    <p class="text-base">We're here for you anytime with our round-the-clock emergency services.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Satisfaction Guaranteed</h3>
+                    <p class="text-base">We ensure every job is done right with a focus on customer satisfaction.</p>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 7: Our Process -->
+    <section id="process" class="py-12 sm:py-16 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Our Process</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">1. Consultation</h3>
+                    <p class="text-base">We assess your plumbing needs and provide a free quote.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">2. Service</h3>
+                    <p class="text-base">Our experts perform the plumbing work with precision and care.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">3. Follow-Up</h3>
+                    <p class="text-base">We ensure everything works perfectly and you're satisfied.</p>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 8: Special Offers -->
+    <section id="offers" class="py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Special Offers</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">10% Off First Service</h3>
+                    <p class="text-base mb-4">New customers get 10% off their first plumbing service with us.</p>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Free Drain Inspection</h3>
+                    <p class="text-base mb-4">Book any service and get a free drain inspection this month.</p>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 9: Leak Detection -->
+    <section id="leak-detection" class="py-12 sm:py-16 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="md:w-1/2">
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-4">Advanced Leak Detection</h2>
+                    <p class="text-base sm:text-lg mb-6">Our state-of-the-art leak detection technology identifies hidden leaks without invasive methods, saving you time and money.</p>
+                    <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-gray-300 h-48 sm:h-64 rounded-lg flex items-center justify-center">
+                        <p class="text-gray-600 text-base">[Placeholder: Image of plumber using leak detection equipment]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 10: Bathroom Remodeling -->
+    <section id="bathroom-remodeling" class="py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row-reverse items-center gap-6">
+                <div class="md:w-1/2">
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-4">Bathroom Remodeling</h2>
+                    <p class="text-base sm:text-lg mb-6">Transform your bathroom with our expert plumbing services, from new fixture installations to complete system upgrades.</p>
+                    <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-gray-300 h-48 sm:h-64 rounded-lg flex items-center justify-center">
+                        <p class="text-gray-600 text-base">[Placeholder: Image of modern bathroom with new plumbing fixtures]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 11: Sewer Line Services -->
+    <section id="sewer-services" class="py-12 sm:py-16 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="md:w-1/2">
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-4">Sewer Line Services</h2>
+                    <p class="text-base sm:text-lg mb-6">We provide professional sewer line repairs and maintenance to keep your system running smoothly and prevent costly backups.</p>
+                    <a href="tel:1234567890" class="bg-blue-600 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-blue-700">Call Now: 1234567890</a>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-gray-300 h-48 sm:h-64 rounded-lg flex items-center justify-center">
+                        <p class="text-gray-600 text-base">[Placeholder: Image of plumber working on sewer line]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section id="faqs" class="py-12 sm:py-16 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Frequently Asked Questions</h2>
+            <div class="max-w-2xl mx-auto space-y-4">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <button class="w-full text-left flex justify-between items-center text-base sm:text-xl font-semibold" onclick="toggleFAQ(this)">
+                        <span>What are your service hours?</span>
+                        <svg class="w-5 sm:w-6 h-5 sm:h-6 transform transition-transform duration-200 plus-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden mt-4">
+                        <p class="text-base">We offer 24/7 emergency services and regular appointments from 8 AM to 6 PM, Monday through Saturday.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <button class="w-full text-left flex justify-between items-center text-base sm:text-xl font-semibold" onclick="toggleFAQ(this)">
+                        <span>Do you provide free quotes?</span>
+                        <svg class="w-5 sm:w-6 h-5 sm:h-6 transform transition-transform duration-200 plus-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden mt-4">
+                        <p class="text-base">Yes, we offer free, no-obligation quotes for all our services. Contact us to schedule an assessment.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <button class="w-full text-left flex justify-between items-center text-base sm:text-xl font-semibold" onclick="toggleFAQ(this)">
+                        <span>Are your plumbers certified?</span>
+                        <svg class="w-5 sm:w-6 h-5 sm:h-6 transform transition-transform duration-200 plus-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden mt-4">
+                        <p class="text-base">All our plumbers are fully certified and trained to handle a wide range of plumbing issues.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map" class="py-12 sm:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Our Location</h2>
+            <div class="max-w-4xl mx-auto">
+                <iframe class="w-full h-64 sm:h-96 rounded-lg" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d144.9537363153167!3d-37.81627917975159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf0727e3a23e8c4f0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sus!4v1635781234567!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-800 text-white py-8 sm:py-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-base">© 2025 PlumbFix. All rights reserved.</p>
+            <p class="mt-2 text-base">Call us: 1234567890 | Email: info@plumbfix.com</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleFAQ(button) {
+            const answer = button.nextElementSibling;
+            const icon = button.querySelector('.plus-icon');
+            answer.classList.toggle('hidden');
+            icon.classList.toggle('rotate-45');
+        }
+    </script>
+</body>
+</html>
